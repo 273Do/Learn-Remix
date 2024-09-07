@@ -1,4 +1,27 @@
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
+
+import { createPost } from "~/models/post.server";
+
+// データの変更やその他のアクションを処理するサーバー専用の関数．
+// Next.jsでいうsever actionみたいなもの．
+// loaderと対比するもの．
+// Next.jsのserver actionの例
+// async function myAction(formData: FormData) {
+//   "use server"
+//   const userId = formData.get("user-id") as string;
+//   const password = formData.get("password") as string;
+// }
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const title = formData.get("title") as string; //name属性がtitleのinput要素の値を取得
+  const slug = formData.get("slug") as string;
+  const markdown = formData.get("markdown") as string;
+
+  await createPost({ title, slug, markdown });
+
+  return redirect("/posts/admin");
+};
 
 export default function NewPost() {
   return (

@@ -1,5 +1,3 @@
-import { resolve } from "path";
-
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form, useNavigation } from "@remix-run/react";
 

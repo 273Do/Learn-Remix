@@ -42,6 +42,10 @@ export default function Posts() {
           </li>
         ))}
       </ul>
+      {/* 普通は/posts/adminとしなければならないが，Remixは自動的に相対パスを取得してくれる */}
+      <Link to="admin" className="text-red-600 underline">
+        Admin
+      </Link>
     </main>
   );
 }

@@ -1,5 +1,7 @@
+import { resolve } from "path";
+
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 
 import { createPost } from "~/models/post.server";
 
@@ -13,6 +15,9 @@ import { createPost } from "~/models/post.server";
 //   const password = formData.get("password") as string;
 // }
 export const action = async ({ request }: ActionFunctionArgs) => {
+  // 1秒待つ
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   const formData = await request.formData();
   const title = formData.get("title") as string; //name属性がtitleのinput要素の値を取得
   const slug = formData.get("slug") as string;
@@ -24,6 +29,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function NewPost() {
+  const navigation = useNavigation();
+  const isCreating = Boolean(navigation.state === "submitting"); // 送信中かどうか
+
   return (
     <Form method="post" className="space-y-3">
       <div>
@@ -55,8 +63,9 @@ export default function NewPost() {
         <button
           type="submit"
           className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
+          disabled={isCreating}
         >
-          Create Post
+          {isCreating ? "Creating..." : "Create Post"}
         </button>
       </div>
     </Form>
